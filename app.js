@@ -5,6 +5,9 @@ const methodOverride = require('method-override')
 const app = express()
 const PORT = process.env.PORT || 3000
 
+//mongodb
+require('./config/mongoose')
+
 //handlebars
 app.engine('hbs', exphbs.engine({ defaultLayout: 'main', extname: 'hbs' }))
 app.set('view engine', 'hbs')
