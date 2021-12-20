@@ -1,6 +1,7 @@
 
 const isUrl = require('is-url')
 const https = require('https')
+const http = require('http')
 
 
 module.exports = {
@@ -19,13 +20,22 @@ module.exports = {
             if (!isUrl(url)) {
                 return resolve(false)
             }
-
-            https.request(url, { method: 'HEAD' }, (res) => {
-                const statusCode = res.statusCode
-                return resolve(statusCode !== undefined && (statusCode < 400 || statusCode >= 500))
-            }).on('error', (e) => {
-                return resolve(false)
-            }).end()
+            if (url.substring(0, 5) === 'https') {
+                https.request(url, { method: 'HEAD' }, (res) => {
+                    const statusCode = res.statusCode
+                    return resolve(statusCode !== undefined && (statusCode < 400 || statusCode >= 500))
+                }).on('error', (e) => {
+                    return resolve(false)
+                }).end()
+            } else {
+                http.request(url, { method: 'HEAD' }, (res) => {
+                    const statusCode = res.statusCode
+                    return resolve(statusCode !== undefined && (statusCode < 400 || statusCode >= 500))
+                }).on('error', (e) => {
+                    return resolve(false)
+                }).end()
+            }
+            
         })
     }
 }
