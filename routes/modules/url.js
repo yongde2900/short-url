@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { urlExist, getRandomString } = require('../../utilities/method')
 const Url = require('../../models/url')
+const host = 'http://localhost:3000/urls/'
 
 router.post('/', async (req, res) => {
     try {
@@ -22,19 +23,29 @@ router.post('/', async (req, res) => {
         newUrl.origin = originalUrl
         //判斷短網址是否重複
         while (isDuplicated) {
-            let short = `http://localhost:3000/urls/${getRandomString(8)}`
+            let short = `${host}${getRandomString(8)}`
             let url = await Url.findOne({ short: short })
             if (!url) {
                 newUrl.short = short
                 isDuplicated = false
             }
-
         }
         await Url.create(newUrl)
         return res.render('index', { shortUrl: newUrl.short, originalUrl: newUrl.origin })
     } catch (e) {
         console.warn(e)
     }
+})
+
+router.get('/:short', async (req, res) => {
+    const short = host + req.params.short
+    console.log(short)
+    let url = await Url.findOne({ short }).exec()
+    console.log(url)
+    if (!url)
+        return res.render('index', { message: '短網址不存在' })
+
+    res.redirect(url.origin)
 })
 
 
