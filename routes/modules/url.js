@@ -38,14 +38,19 @@ router.post('/', async (req, res) => {
 })
 
 router.get('/:short', async (req, res) => {
-    const short = host + req.params.short
-    console.log(short)
-    let url = await Url.findOne({ short }).exec()
-    console.log(url)
-    if (!url)
-        return res.render('index', { message: '短網址不存在' })
+    try {
+        const short = host + req.params.short
+        console.log(short)
+        let url = await Url.findOne({ short }).exec()
+        console.log(url)
+        if (!url)
+            return res.render('index', { message: '短網址不存在' })
 
-    res.redirect(url.origin)
+        res.redirect(url.origin)
+    }
+    catch (e) {
+        console.warn(e)
+    }
 })
 
 
