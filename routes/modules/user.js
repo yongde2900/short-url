@@ -18,23 +18,21 @@ router.post('/register', async (req, res) => {
     let { name, email, password, confirmPassword } = req.body
     let errors = []
     if (!name || !email || !password || !confirmPassword)
-        errors.push('All fields are required')
+        errors.push({ message: 'All fields are required' })
     if (password !== confirmPassword)
-        errors.push("Password dosn't match confirm password")
+        errors.push({ message: "Password dosn't match confirm password" })
     if (errors.length) {
-        console.log(errors)
         return res.render('register', { errors, name, email })
     }
     let user = await User.findOne({ email }).exec()
     if (user) {
-        console.log(user)
-        errors.push('email is exist')
-        console.log(errors)
+        errors.push({ message: 'email is exist' })
         return res.render('register', { errors, name, email })
     }
     let salt = bcrypt.genSaltSync(10)
     let hash = bcrypt.hashSync(password, salt)
     User.create({ name, email, password: hash })
+    req.flash('success_msg', 'Registered successfully')
     res.redirect('/')
 })
 

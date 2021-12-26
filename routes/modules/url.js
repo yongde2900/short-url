@@ -10,8 +10,10 @@ router.post('/', async (req, res) => {
         const isUrlExist = await urlExist(originalUrl)
 
         //判斷網址是否有效
-        if (!isUrlExist)
-            return res.render('index', { message: '無效的網址', originalUrl })
+        if (!isUrlExist){
+            req.flash('warning_msg', 'Invalid URL')
+            return res.redirect('/')
+            }
 
         //判斷短網址是否已存在
         let url = await Url.findOne({ origin: originalUrl }).exec()
@@ -43,8 +45,10 @@ router.get('/:short', async (req, res) => {
         console.log(short)
         let url = await Url.findOne({ short }).exec()
         console.log(url)
-        if (!url)
-            return res.render('index', { message: '短網址不存在' })
+        if (!url){
+            req.flash('warning_msg', 'The short URL dose not exist')
+            return res.redirect('/')
+        }
 
         res.redirect(url.origin)
     }
