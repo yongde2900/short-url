@@ -1,0 +1,26 @@
+<div class="row mt-5 justify-content-center">
+    <div class="col-md-6 m-2">
+        <div class="card card-body">
+            <h1 class="text-center mt-3">Shortr Url</h1>
+            {{>message}}
+            <form action="/urls" method="POST" class="row">
+                <div class="fomr-group">
+                    <input class="form-control" type="text" name="path" id="path" value="{{originalUrl}}"
+                        placeholder="Enter the URL to shorten">
+                    <button type="submit" class="btn btn-outline-primary btn-block mt-3">submit</button>
+                </div>
+
+
+            </form>
+
+
+            {{#if shortUrl}}
+            <div class="alert alert-warning mt-3" role="alert">
+                <a href="{{shortUrl}}" id="shortUrl">{{shortUrl}}</a>
+                <button type="button" id="btnCopy" class="ms-2 btn btn-outline-primary">Copy</button>
+            </div>
+
+            {{/if}}
+        </div>
+    </div>
+</div>
