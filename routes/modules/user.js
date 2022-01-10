@@ -33,7 +33,7 @@ router.post('/register', async (req, res) => {
     let hash = bcrypt.hashSync(password, salt)
     User.create({ name, email, password: hash })
     req.flash('success_msg', 'Registered successfully')
-    res.redirect('/')
+    res.redirect('/users/login')
 })
 
 router.get('/logout', (req, res) => {

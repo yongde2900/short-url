@@ -10,15 +10,15 @@ router.post('/', async (req, res) => {
         const isUrlExist = await urlExist(originalUrl)
 
         //判斷網址是否有效
-        if (!isUrlExist){
+        if (!isUrlExist) {
             req.flash('warning_msg', 'Invalid URL')
             return res.redirect('/')
-            }
+        }
 
         //判斷短網址是否已存在
         let url = await Url.findOne({ origin: originalUrl }).exec()
         if (url)
-            return res.render('index', { shortUrl: url.short, originalUrl })
+            return res.render('index', { shortUrl: url.short, originalUrl, urlId: url._id })
 
         let newUrl = {}
         let isDuplicated = true
@@ -33,7 +33,8 @@ router.post('/', async (req, res) => {
             }
         }
         await Url.create(newUrl)
-        return res.render('index', { shortUrl: newUrl.short, originalUrl: newUrl.origin })
+
+        return res.render('index', { shortUrl: newUrl.short, originalUrl: newUrl.origin, urlId: newUrl._id })
     } catch (e) {
         console.warn(e)
     }
@@ -42,10 +43,9 @@ router.post('/', async (req, res) => {
 router.get('/:short', async (req, res) => {
     try {
         const short = host + req.params.short
-        console.log(short)
+
         let url = await Url.findOne({ short }).exec()
-        console.log(url)
-        if (!url){
+        if (!url) {
             req.flash('warning_msg', 'The short URL dose not exist')
             return res.redirect('/')
         }
