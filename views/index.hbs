@@ -19,9 +19,9 @@
                 <a href="{{shortUrl}}" id="shortUrl">{{shortUrl}}</a>
                 <button type="button" id="btnCopy" class="ms-2 btn btn-outline-primary">Copy</button>
                 {{#if isAuthenticated}}
-                <form action="/list" method="post" class="inline">
-                <input type="hidden" name="urlId" value="{{urlId}}" >
-                <button type="submit" class="ms-2 btn btn-outline-danger">Save</button>
+                <form action="/list" method="post" style="display: inline;">
+                    <input type="hidden" name="urlId" value="{{urlId}}">
+                    <button type="submit" class="ms-2 btn btn-outline-danger">Save</button>
                 </form>
                 {{/if}}
             </div>
