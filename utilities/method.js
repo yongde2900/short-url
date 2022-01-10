@@ -45,7 +45,6 @@ module.exports = {
             for (let i = 0; i < arr.length; i++) {
                 todoList.push(Url.findById(arr[i].urlId).lean())
             }
-            console.log(todoList)
             let info = Promise.all(todoList)
             return resolve(info)
         })
